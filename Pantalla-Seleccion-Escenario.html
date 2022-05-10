@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Pantalla principal</title>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/fd0511d7e0.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link href="./css/my_css.css" rel="stylesheet">
+</head>
+
+<style>
+    .escenario-1 {
+        background-position: center;
+        position: absolute;
+        background-image: url('./recursos/Escenario_Nieve.png');
+        background-repeat: no-repeat;
+        background-color: rgb(103, 250, 255);
+        height: 100vh;
+        width: 33.3333vw;
+        filter: grayscale(100%);
+    }
+
+    .escenario-1:hover {
+        filter: grayscale(0%);
+    }
+
+    .escenario-2 {
+        background-position: center;
+        position: absolute;
+        background-image: url('./recursos/Escenario_Lava.png');
+        background-repeat: no-repeat;
+        background-color: rgb(103, 250, 255);
+        height: 100vh;
+        width: 33.3333vw;
+        margin-left: 33.3333vw;
+        filter: grayscale(100%);
+    }
+
+    .escenario-2:hover {
+        filter: grayscale(0%);
+    }
+
+    .escenario-3 {
+        background-position: center;
+        position: absolute;
+        background-image: url('./recursos/Escenario_Bosque.png');
+        background-repeat: no-repeat;
+        background-color: rgb(103, 250, 255);
+        height: 100vh;
+        width: 33.3333vw;
+        margin-left: 66.6666vw;
+        filter: grayscale(100%);
+    }
+
+    .escenario-3:hover {
+        filter: grayscale(0%);
+    }
+</style>
+
+<body>
+    <div class="escenario-1">
+        <a class="button-1" style="margin-left: 80px; margin-top: 260px;" href="Pantalla-Juego.html?scenary=1&mode=single"><img src="./recursos/Escenarios_1v1_Button.png"></a>
+        <a class="button-2" style="margin-left: 80px; margin-top: 450px;" href="Pantalla-Juego.html?scenary=1&mode=coop"><img src="./recursos/Escenarios_2v2_Button.png"></a>
+    </div>
+    <div class="escenario-2">
+        <a class="button-1" style="margin-left: 80px; margin-top: 260px;" href="Pantalla-Juego.html?scenary=2&mode=single"><img src="./recursos/Escenarios_1v1_Button.png"></a>
+        <a class="button-2" style="margin-left: 80px; margin-top: 450px;" href="Pantalla-Juego.html?scenary=2&mode=coop"><img src="./recursos/Escenarios_2v2_Button.png"></a>
+    </div>
+    <div class="escenario-3">
+        <a class="button-1" style="margin-left: 80px; margin-top: 260px;" href="Pantalla-Juego.html?scenary=3&mode=single"><img src="./recursos/Escenarios_1v1_Button.png"></a>
+        <a class="button-2" style="margin-left: 80px; margin-top: 450px;" href="Pantalla-Juego.html?scenary=3&mode=coop"><img src="./recursos/Escenarios_2v2_Button.png"></a>
+    </div>
+
+    <script src=""></script>
+</body>
+
+</html>

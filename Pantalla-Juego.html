@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Pantalla principal</title>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="./css/my_css.css" rel="stylesheet" >
+
+    <script type="text/javascript" src="libs/jquery/jquery-2.1.4.min.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "./build/three.module.js"
+            }
+        }
+    </script>
+    <script type="module" src="main.js"></script>
+
+    <style>
+        p {
+            background-position: center;
+            background-image: url('./recursos/Pausa.png');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: rgb(0, 6, 14);
+            display: none; 
+            height: 100vh; 
+            width: 100vw;
+        }
+        a{
+            display: none;
+        }
+    </style>
+</head>
+
+<body style="margin: 0%">
+
+    <p class="pausa" style="margin: 0%">
+            <a class="pausa button-pause-1" href=""><img  src="./recursos/Pausa_Resume_Button.png"></a>
+            <a class="pausa button-pause-2" href="index.html"><img src="./recursos/Pausa_Quit_Button.png"></a>
+    </p>
+
+    <div class="juego" style="display: flex; height: 100px;">
+        <div class="juego" style="width: 50%;" id="scene-section-1"></div>
+        <div class="juego" style="flex-grow: 1;" id="scene-section-2"></div>
+    </div>
+</body>

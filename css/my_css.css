@@ -1,0 +1,76 @@
+.principal-container{
+    position: absolute;
+    margin-left: 270px;
+    margin-top: 346px;
+}
+
+.button-1{
+    position: absolute;
+}
+
+.button-1:hover{
+    filter: grayscale(100%);
+}
+
+.button-2{
+    position: absolute;
+    margin-top: 134px;
+}
+
+.button-2:hover{
+    filter: grayscale(100%);
+}
+
+.button-3{
+    position: absolute;
+    margin-top: 266px;
+}
+
+.button-3:hover{
+    filter: grayscale(100%);
+}
+
+.button-pause-1{
+    position: absolute;
+    margin-top: 260px;
+    margin-left: 660px;
+}
+
+.button-pause-1:hover{
+    filter: grayscale(100%);
+}
+
+.button-pause-2{
+    position: absolute;
+    margin-top: 410px;
+    margin-left: 660px;
+}
+
+.button-pause-2:hover{
+    filter: grayscale(100%);
+}
+.button-ranking-1{
+    position: absolute;
+    margin-top: 715px;
+    margin-left: 1187px;
+}
+
+.button-ranking-1:hover{
+    filter: grayscale(100%);
+}
+.button-options-1{
+    position: absolute;
+    margin-top: 718px;
+    margin-left: 1225px;
+}
+
+.button-options-1:hover{
+    filter: grayscale(100%);
+}
+.opciones-container{
+    position: absolute;
+}
+
+.ranking-container{
+    position: absolute;
+}
