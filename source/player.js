@@ -80,11 +80,10 @@ export default class Player {
                 object.rotation.y = THREE.Math.degToRad(180)
                 object.scale.setScalar(1);
                 this.target = object;
-                this.preMovement = this.target.clone();
                 const mixer = new THREE.AnimationMixer(object);
                 this.mixer = mixer;
 
-                console.log("jugador cargado");
+                //console.log("jugador cargado");
 
                 fbxLoader.setPath(this.pathAnimation);
                 fbxLoader.load(
@@ -119,7 +118,7 @@ export default class Player {
                                         const clip = object.animations[0];
                                         const action = mixer.clipAction(clip);
 
-                                        action.setLoop(THREE.LoopOnce)
+                                        //action.setLoop(THREE.LoopOnce)
                                         this.animationActions.push(action)
                                     
                                         //personaje listo
@@ -175,83 +174,90 @@ export default class Player {
         var yaw = 5;
         var rotation = (yaw * direction) * deltaTime;
         this.target.rotation.y += rotation;
-        this.preMovement.rotation.y -= rotation;
         this.box.rotation.y += rotation;
         this.boxCollition.copy(this.box.geometry.boundingBox).applyMatrix4(this.box.matrixWorld)
     }
 
-    move(direction, deltaTime, collitionsModels) {
+    move(direction, deltaTime, modelsCollitions, puzzlesCollitions) {
         
         this.setAction('run');
 
-        this.preMovement.translateZ((direction * this.speed) * deltaTime);
-
-        this.box.position.set(this.preMovement.position.x,this.preMovement.position.y + 15, this.preMovement.position.z);
+        this.box.position.set(this.target.position.x,this.target.position.y + 15, this.target.position.z);
+        this.box.translateZ(-direction * 20);
         this.boxCollition.copy(this.box.geometry.boundingBox).applyMatrix4(this.box.matrixWorld)
-    
-        if(this.checkCollitions(collitionsModels)){
-            this.preMovement.position.x = this.target.position.x;
-            this.preMovement.position.z = this.target.position.z;
-            this.box.position.set(this.target.position.x,this.target.position.y + 15, this.target.position.z);
-            this.boxCollition.copy(this.box.geometry.boundingBox).applyMatrix4(this.box.matrixWorld)
-        }else{
+   
+
+        if(!this.checkCollitions(modelsCollitions, puzzlesCollitions)){
+            
             this.target.translateZ((direction * this.speed) * deltaTime);
+
         }
 
-        /*
-        this.preMovement.translateZ((direction * this.speed) * deltaTime);
-
-        if(this.checkCollitions(collitionsModels)){
-            this.box.position.set(this.target.position.x,this.target.position.y + 15, this.target.position.z);
-            this.boxCollition.copy(this.box.geometry.boundingBox).applyMatrix4(this.box.matrixWorld)
-    
-        }else{
-            this.target.translateZ((direction * this.speed) * deltaTime);
-        }
-        */
     }
 
-    checkCollitions(collitionsModels){
+    checkCollitions(modelsCollitions, puzzlesCollitions){
         
         this.isCollision = false;
-        collitionsModels.forEach(
+        
+        modelsCollitions.forEach(
             element => {
                 if(this.boxCollition.intersectsBox(element)){
                     this.isCollision = true;
-                    //console.log("colision")
                 }
             }
         );
+       
+
+        puzzlesCollitions.forEach(
+            element => {
+                if(this.boxCollition.intersectsBox(element)){
+                    this.isCollision = true;
+                }
+            }
+        );
+
         return this.isCollision;
     }
 
-    listenInput(deltaTime, collitionsModels){
+    update(deltaTime, collitionsModels, puzzlesCollitions){
         if (!this.modelReady){
             return;
         }
         
         if(this.input.keys.forward){
-            this.move(1, deltaTime, collitionsModels );
+
+            this.move(1, deltaTime, collitionsModels, puzzlesCollitions );
+
         }
         else if(this.input.keys.backward){
-            this.move(-1, deltaTime, collitionsModels );
+
+            this.move(-1, deltaTime, collitionsModels, puzzlesCollitions );
+
         }else if(this.input.keys.action){
-            this.setAction('idle');
+
+            this.setAction('action');
             this.action = true;
             if(this.actionPressed < 1){
                 this.actionPressed += 0.1;
             }
+
         }else{
+
             this.action = false;
             this.actionPressed = 0;
             this.setAction('idle');
+            this.box.position.set(this.target.position.x,this.target.position.y + 15, this.target.position.z);
         }
         
         if(this.input.keys.left){
+
             this.rotate(1, deltaTime)
+
         }
         else if(this.input.keys.right){
+
             this.rotate(-1, deltaTime)
+
         }
         
 
@@ -387,36 +393,39 @@ class PlayerControllerInput {
 
         if(this.noPlayer == 2){
             switch (event.keyCode) {
-                case 38: // w
+                case 38: // up
                     this.keys.forward = true;
                     break;
-                case 37: // a
+                case 37: // left
                     this.keys.left = true;
                     break;
-                case 40: // s
+                case 40: // down
                     this.keys.backward = true;
                     break;
-                case 39: // d
+                case 39: // right
                     this.keys.right = true;
+                    break;
+                case 97: // 1
+                    this.keys.action = true;
                     break;
             }
         }
 
         if(this.noPlayer == 3){
             switch (event.keyCode) {
-                case 73: // w
+                case 73: // i
                     this.keys.forward = true;
                     break;
-                case 74: // a
+                case 74: // j
                     this.keys.left = true;
                     break;
-                case 75: // s
+                case 75: // k
                     this.keys.backward = true;
                     break;
-                case 76: // d
+                case 76: // l
                     this.keys.right = true;
                     break;
-                case 79: // i
+                case 79: // o
                     this.keys.action = true;
                 break;
             }
@@ -424,17 +433,20 @@ class PlayerControllerInput {
 
         if(this.noPlayer == 4){
             switch (event.keyCode) {
-                case 104: // w
+                case 104: // 8
                     this.keys.forward = true;
                     break;
-                case 100: // a
+                case 100: // 4
                     this.keys.left = true;
                     break;
-                case 101: // s
+                case 101: // 5
                     this.keys.backward = true;
                     break;
-                case 102: // d
+                case 102: // 6
                     this.keys.right = true;
+                    break;
+                case 105: // 9
+                    this.keys.action = true;
                     break;
             }
         }
@@ -463,36 +475,39 @@ class PlayerControllerInput {
 
         if(this.noPlayer == 2){
             switch (event.keyCode) {
-                case 38: // w
+                case 38: // up
                     this.keys.forward = false;
                     break;
-                case 37: // a
+                case 37: // left
                     this.keys.left = false;
                     break;
-                case 40: // s
+                case 40: // down
                     this.keys.backward = false;
                     break;
-                case 39: // d
+                case 39: // right
                     this.keys.right = false;
+                    break;
+                case 97: // 1
+                    this.keys.action = false;
                     break;
             }
         }
 
         if(this.noPlayer == 3){
             switch (event.keyCode) {
-                case 73: // w
+                case 73: // i
                     this.keys.forward = false;
                     break;
-                case 74: // a
+                case 74: // j
                     this.keys.left = false;
                     break;
-                case 75: // s
+                case 75: // k
                     this.keys.backward = false;
                     break;
-                case 76: // d
+                case 76: // l
                     this.keys.right = false;
                     break;
-                case 79: // i
+                case 79: // o
                     this.keys.action = false;
                 break;
             }
@@ -500,17 +515,20 @@ class PlayerControllerInput {
 
         if(this.noPlayer == 4){
             switch (event.keyCode) {
-                case 104: // w
+                case 104: // 8
                     this.keys.forward = false;
                     break;
-                case 100: // a
+                case 100: // 4
                     this.keys.left = false;
                     break;
-                case 101: // s
+                case 101: // 5
                     this.keys.backward = false;
                     break;
-                case 102: // d
+                case 102: // 6
                     this.keys.right = false;
+                    break;
+                case 105: // 9
+                    this.keys.action = false;
                     break;
             }
         }

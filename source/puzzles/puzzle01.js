@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 
 export default class Puzzle01{
-    constructor(posX, posY, posZ, rotY, posX2, posY2, posZ2, lever, wall, collitionsModels, DEV){
+    constructor(posX, posY, posZ, rotY, posX2, posY2, posZ2, lever, wall, puzzlesCollitions, DEV){
         //Posicion de la palanca
         this.posX = posX;
         this.posY = posY;
@@ -15,6 +15,8 @@ export default class Puzzle01{
         this.posZ2 = posZ2;
 
         this.complete = false;
+        this.velocity = 1;
+        this.endPosition = posY - 65;
 
         this.obj = lever;
         this.obj.position.set(posX, posY, posZ);
@@ -45,44 +47,38 @@ export default class Puzzle01{
         this.boxCollition2 = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
         this.boxCollition2.setFromObject(this.box2);
 
-        collitionsModels.push(this.boxCollition2);
+        puzzlesCollitions.push(this.boxCollition2);
     }
 
-    update(playerCollition){
+    update(playerCollition, puzzlesCollitions){
+
         if(this.boxCollition.intersectsBox(playerCollition)){
-            console.log("en puzzle");
-        }
-    }
+            
+            this.obj2.position.y -= this.velocity;
 
-    collition(playerPosX, playerPosZ, action){
+            if(this.obj2.position.y < this.endPosition){
+                this.complete = true;
+                this.obj2.visible = false;
+                this.box2.visible = false;
 
-        if(playerPosZ < this.posZ + 20 && playerPosZ > this.posZ - 20){
-            if(playerPosX < this.posX + 20 && playerPosX > this.posX - 20){
-                
-                console.log("presiono")
-                this.object2.position.y -= 0.2;
-
-                if(this.object2.position.y < -67){
-                    this.complete = true;
-                    console.log("puzzle completado")
+                //Eliminar colision de arreglo
+                var index = puzzlesCollitions.indexOf(this.boxCollition2);
+                if (index > -1) {
+                    puzzlesCollitions.splice(index, 1);
                 }
-    
+
             }
         }
-
+  
     }
 
 
 
-    renderer(scenes){
-        scenes[0].add(this.obj);
-        scenes[0].add(this.obj2);
-        scenes[0].add(this.box);
-        scenes[0].add(this.box2);
-        scenes[1].add(this.obj.clone());
-        scenes[1].add(this.obj2.clone());
-        scenes[1].add(this.box.clone());
-        scenes[1].add(this.box2.clone());
+    renderer(scene){
+        scene.add(this.obj);
+        scene.add(this.obj2);
+        scene.add(this.box);
+        scene.add(this.box2);
     }
 
 

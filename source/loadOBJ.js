@@ -17,7 +17,7 @@ export default class LoadOBJ{
             objLoader.load(objFile, (objCargado) => {
                 //Se ejecuta cuando termina de cargar el obj
                 //onLoadCallback(objCargado);
-                this.object = objCargado;
+                this.obj = objCargado;
                 this.ready = true;
                 callback()
             });
