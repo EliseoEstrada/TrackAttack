@@ -49,9 +49,18 @@
 .button-pause-2:hover{
     filter: grayscale(100%);
 }
+.button-pause-3{
+    position: absolute;
+    margin-top: 400px;
+    margin-left: 660px;
+}
+
+.button-pause-3:hover{
+    filter: grayscale(100%);
+}
 .button-ranking-1{
     position: absolute;
-    margin-top: 715px;
+    margin-top: 600px;
     margin-left: 1187px;
 }
 
@@ -60,17 +69,72 @@
 }
 .button-options-1{
     position: absolute;
-    margin-top: 718px;
-    margin-left: 1225px;
+    margin-top: 570px;
+    margin-left: 1110px;
 }
 
 .button-options-1:hover{
     filter: grayscale(100%);
 }
 .opciones-container{
+    width: 100%;
     position: absolute;
 }
 
 .ranking-container{
     position: absolute;
+    width: 100%;
+    overflow-x: hidden;
+    text-align: center;
+    margin-top: 285px;
+    padding-right: 50px;
+    height: 205px;
+}
+
+.musica{
+   
+    margin-top: 718px;
+    margin-left: 1225px;
+}
+
+.play{
+    height: 30px;
+    border-radius: 4px;
+    border-color: white;
+    background-color: midnightblue;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: white;
+}
+
+.play:hover{
+    color: gray;
+}
+
+.stop{
+    height: 30px;
+    border-radius: 4px;
+    border-color: white;
+    background-color: midnightblue;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: white;
+    ;
+}
+
+.stop:hover{
+    background-color: midnightblue;
+    color: gray;
+}
+
+.half-screen{
+    width: 20%;
+    display: inline-block;
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.ranking-container::-webkit-scrollbar {
+  display: none;
 }

@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 
 export default class Puzzle02{
-    constructor(posX, posY, posZ, rotY, posX2, posY2, posZ2, bridge, button, puzzlesCollitions, DEV){
+    constructor(posX, posY, posZ, rotY,bridge, button, puzzlesCollitions, COOP, DIFFICULTY, DEV){
         //Posicion de la palanca
         this.posX = posX;
         this.posY = posY;
@@ -9,13 +9,26 @@ export default class Puzzle02{
 
         this.rotY = rotY;
 
-        //Posicion de botones
-        this.posX2 = posX2;
-        this.posY2 = posY2;
-        this.posZ2 = posZ2;
-
+        this.coop = COOP;
+        this.dev = DEV;
+        
         this.complete = false;
         this.rotationVelocity = 1.0;
+
+        if(DIFFICULTY == 1){
+            this.rotationVelocity = 1.0;
+        }
+
+        if(DIFFICULTY == 2){
+            this.rotationVelocity = 1.5;
+        }
+
+        if(COOP){
+            this.rotationVelocity = this.rotationVelocity * 2.0
+        }
+        
+
+
         this.degrees = rotY;
         this.up = false;
 
@@ -76,7 +89,7 @@ export default class Puzzle02{
         //Trigger final
         var geometry4 = new THREE.BoxGeometry(450,80,20);
         this.boxFinal = new THREE.Mesh(geometry4, transparentMaterial);
-        this.boxFinal.position.set(posX, posY, posZ - 200);
+        this.boxFinal.position.set(posX, posY, posZ - 180);
         this.boxCollitionF = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
         this.boxCollitionF.setFromObject(this.boxFinal);
 
@@ -88,32 +101,53 @@ export default class Puzzle02{
 
     update(player1Collition, player1Action, player2Collition, player2Action){
         
-        if(this.boxCollitionF.intersectsBox(player1Collition) &&
-            this.boxCollitionF.intersectsBox(player2Collition)){
+        var buttonIspressed = false;
+        if(this.coop){
+            if(this.boxCollitionF.intersectsBox(player1Collition) &&
+                this.boxCollitionF.intersectsBox(player2Collition)){
                 this.complete = true;
                 return 
-        }
+            }
 
-        var buttonIspressed = false;
+            if((this.boxCollition5.intersectsBox(player1Collition) && (player1Action)) ||
+                (this.boxCollition6.intersectsBox(player1Collition) && (player1Action))){
+                    buttonIspressed = true;
+            }
 
-        if((this.boxCollition5.intersectsBox(player1Collition) && (player1Action)) ||
-            (this.boxCollition6.intersectsBox(player1Collition) && (player1Action))){
-                buttonIspressed = true;
-        }
+            if((this.boxCollition5.intersectsBox(player2Collition) && (player2Action)) ||
+                (this.boxCollition6.intersectsBox(player2Collition) && (player2Action))){
+                    buttonIspressed = true;
+            }
 
-        if((this.boxCollition5.intersectsBox(player2Collition) && (player2Action)) ||
-            (this.boxCollition6.intersectsBox(player2Collition) && (player2Action))){
-                buttonIspressed = true;
-        }
+            if(!buttonIspressed){
+                this.obj.rotation.y = THREE.Math.degToRad(this.degrees);
 
-        if(!buttonIspressed){
-            this.obj.rotation.y = THREE.Math.degToRad(this.degrees);
+                this.degrees += this.rotationVelocity;
+                if(this.degrees > 360){
+                    this.degrees = 0;
+                }
+            }
+        }else{
+            if(this.boxCollitionF.intersectsBox(player1Collition)){
+                this.complete = true;
+                return 
+            }
 
-            this.degrees += this.rotationVelocity;
-            if(this.degrees > 360){
-                this.degrees = 0;
+            if((this.boxCollition5.intersectsBox(player1Collition) && (player1Action)) ||
+                (this.boxCollition6.intersectsBox(player1Collition) && (player1Action))){
+                    buttonIspressed = true;
+            }
+
+            if(buttonIspressed){
+                this.obj.rotation.y = THREE.Math.degToRad(this.degrees);
+
+                this.degrees += this.rotationVelocity;
+                if(this.degrees > 360){
+                    this.degrees = 0;
+                }
             }
         }
+
 
 
         if(this.isInRange()){
@@ -149,18 +183,34 @@ export default class Puzzle02{
     }
 
 
+    finishPuzzle(scene, puzzlesCollitions){
+
+        scene.remove(this.wall);
+        if(this.dev){
+            scene.remove(this.box);
+            scene.remove(this.box2);
+            scene.remove(this.box3);
+            scene.remove(this.box4);
+            scene.remove(this.box5);
+            scene.remove(this.box6);
+            scene.remove(this.boxFinal);
+        }
+    }
 
     renderer(scene){
         scene.add(this.obj);
-        scene.add(this.box);
-        scene.add(this.box2);
-        scene.add(this.box3);
-        scene.add(this.box4);
-        scene.add(this.box5);
-        scene.add(this.box6);
-        scene.add(this.boxFinal);
         scene.add(this.button1);
         scene.add(this.button2);
+
+        if(this.dev){
+            scene.add(this.box);
+            scene.add(this.box2);
+            scene.add(this.box3);
+            scene.add(this.box4);
+            scene.add(this.box5);
+            scene.add(this.box6);
+            scene.add(this.boxFinal);
+        }
     }
 
 

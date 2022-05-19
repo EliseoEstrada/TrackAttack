@@ -8,23 +8,65 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
         <link href="./css/my_css.css" rel="stylesheet" >
+        <link href="./css/music_style.css" rel="stylesheet" >
     </head>
 
     <style>
         body {
             background-position: center;
-            background-image: url('./recursos/Opciones.png');
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-color: rgb(19, 113, 255);
         }
     </style>
 
-<body>
+    <audio controls autoplay loop hidden id="audioR">
+            
+    </audio>
+
+<body id="idBody" style="background-image: url('./recursos/Opciones.png');">
+
+ 
+
     <div class="opciones-container">
-        <a class="button-options-1" href="Pantalla_Principal.html"><img src="./recursos/Opciones_Back_Button.png"></a>
+
+        <button id="circle_dance_sefchol" class="pausa button-1 play" style="margin-top: 260px; margin-left: 600px;" onclick="setCancion('circle_dance_sefchol.mp3')">PLAY CIRCLE DANCE SEFCHOL</button>
+        <button id="Fast_and_Run_Nico_Staf" class="pausa button-1 play" style="margin-top: 300px; margin-left: 600px;" onclick="setCancion('Fast_and_Run_Nico_Staf.mp3')">PLAY FAST AND RUN NICO STAF</button>
+        <button id="Switched_on_Carcassi_Brian_Bolger" class="pausa button-1 play" style="margin-top: 340px; margin-left: 600px;" onclick="setCancion('Switched_on_Carcassi_Brian_Bolger.mp3')">PLAY SWITCHED ON CARCASSI BRIAN BOLGER</button>
+        <button id="Black_Mass_Brian_Bolger" class="pausa button-1 play" style="margin-top: 380px; margin-left: 600px;" onclick="setCancion('Black_Mass_Brian_Bolger.mp3')">PLAY BLACK MASS BRIAN BOLGER</button>
+        <button id="Press_Fuse_French_Fuse" class="pausa button-1 play" style="margin-top: 420px; margin-left: 600px;" onclick="setCancion('Press_Fuse_French_Fuse.mp3')">PLAY PRESS FUSE FRENCH FUSE</button>
+        <button class="pausa button-1 stop material-icons" style="margin-top: 460px; margin-left: 600px;">STOP SONG</button>
+        <input type="range" max="1" min="0" step="0.1" id="volumen" class="volumen"style="margin-top: 465px; margin-left: 780px;">
+
+        <br>
+
+        <button id="BotonSI" class="pausa button-1 play" style="margin-top: 50px; margin-left: 600px;" onclick="SeleccionarIdioma()">Select language: English</button>
+     
     </div>
 
-<script src=""></script>
+   
+
+
+        <a class="button-options-1" id="LinkBotAtras" href="index.html?"><img id="ImagenOpcAtras"  src="./recursos/Opciones_Back_Button.png"></a>
+
+    </div>
+
+<script type="text/javascript">
+
+    var audioR = null;
+
+    if(localStorage.getItem('cancion') != null){
+
+        audioR = document.getElementById('audioR');
+        audioR.innerHTML = '<source src="'+localStorage.getItem('cancion')+'" type="audio/mpeg">';
+        if(localStorage.getItem('volumen') != null){
+            audioR.volume = localStorage.getItem('volumen');
+        }
+    }
+
+</script>
+<script src="Musica.js"></script>
+<script src="Idioma.js"></script>
+
 </body>
 </html>

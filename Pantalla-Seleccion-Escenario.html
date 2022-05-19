@@ -63,21 +63,42 @@
     }
 </style>
 
+<audio controls autoplay loop hidden id="audioR">
+            
+</audio>
+
 <body>
     <div class="escenario-1">
-        <a class="button-1" style="margin-left: 80px; margin-top: 260px;" href="Pantalla-Juego.html?scenary=1&mode=single"><img src="./recursos/Escenarios_1v1_Button.png"></a>
-        <a class="button-2" style="margin-left: 80px; margin-top: 450px;" href="Pantalla-Juego.html?scenary=1&mode=coop"><img src="./recursos/Escenarios_2v2_Button.png"></a>
+        <a class="button-1" style="margin-left: 80px; margin-top: 260px;" href="Pantalla-Juego.html?scenary=1&mode=single"><img src="./recursos/Escenarios_1v1_Button_VS.png"></a>
+        <a class="button-2" style="margin-left: 80px; margin-top: 450px;" href="Pantalla-Juego.html?scenary=1&mode=coop"><img src="./recursos/Escenarios_2v2_Button_VS.png"></a>
     </div>
     <div class="escenario-2">
-        <a class="button-1" style="margin-left: 80px; margin-top: 260px;" href="Pantalla-Juego.html?scenary=2&mode=single"><img src="./recursos/Escenarios_1v1_Button.png"></a>
-        <a class="button-2" style="margin-left: 80px; margin-top: 450px;" href="Pantalla-Juego.html?scenary=2&mode=coop"><img src="./recursos/Escenarios_2v2_Button.png"></a>
+        <a class="button-1" style="margin-left: 80px; margin-top: 260px;" href="Pantalla-Juego.html?scenary=2&mode=single"><img src="./recursos/Escenarios_1v1_Button_VS.png"></a>
+        <a class="button-2" style="margin-left: 80px; margin-top: 450px;" href="Pantalla-Juego.html?scenary=2&mode=coop"><img src="./recursos/Escenarios_2v2_Button_VS.png"></a>
     </div>
     <div class="escenario-3">
-        <a class="button-1" style="margin-left: 80px; margin-top: 260px;" href="Pantalla-Juego.html?scenary=3&mode=single"><img src="./recursos/Escenarios_1v1_Button.png"></a>
-        <a class="button-2" style="margin-left: 80px; margin-top: 450px;" href="Pantalla-Juego.html?scenary=3&mode=coop"><img src="./recursos/Escenarios_2v2_Button.png"></a>
+        <a class="button-1" style="margin-left: 80px; margin-top: 260px;" href="Pantalla-Juego.html?scenary=3&mode=single"><img src="./recursos/Escenarios_1v1_Button_VS.png"></a>
+        <a class="button-2" style="margin-left: 80px; margin-top: 450px;" href="Pantalla-Juego.html?scenary=3&mode=coop"><img src="./recursos/Escenarios_2v2_Button_VS.png"></a>
     </div>
 
     <script src=""></script>
-</body>
 
+</body>
+<script type="text/javascript">
+
+    if(localStorage.getItem('cancion') != null){
+
+        const audioR = document.getElementById('audioR');
+        audioR.innerHTML = '<source src="'+localStorage.getItem('cancion')+'" type="audio/mpeg">';
+        if(localStorage.getItem('volumen') != null){
+            audioR.volume = localStorage.getItem('volumen');
+        }
+
+    }else{
+
+        const audioR = document.getElementById('audioR');        
+        audioR.innerHTML = '<source src="opcion1_would_it_kill_you_mini_vandals.mp3" type="audio/mpeg">';
+
+    }
+</script>
 </html>

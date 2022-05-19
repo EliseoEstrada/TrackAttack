@@ -21,7 +21,6 @@
     <style>
         p {
             background-position: center;
-            background-image: url('./recursos/Pausa.png');
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-color: rgb(0, 6, 14);
@@ -35,15 +34,59 @@
     </style>
 </head>
 
-<body style="margin: 0%">
+<audio controls autoplay loop hidden id="audioR">
+            
+</audio>
 
-    <p class="pausa" style="margin: 0%">
-            <a class="pausa button-pause-1" href=""><img  src="./recursos/Pausa_Resume_Button.png"></a>
-            <a class="pausa button-pause-2" href="index.html"><img src="./recursos/Pausa_Quit_Button.png"></a>
+<body style="margin: 0;">
+
+    <p id="idBody" style="background-image: url('./recursos/Pausa.png'); margin: 0%;" class="pausa">
+
+        <a class="pausa button-pause-1" href=""><img id="btnResume" src="./recursos/Pausa_Resume_Button.png"></a>
+        <a class="pausa button-pause-3" href="index.html"><img id="btnQuit" src="./recursos/Pausa_Quit_Button.png"></a>
+        
+        <button id="circle_dance_sefchol" class="pausa button-1 play" style="margin-top: 260px;" onclick="setCancion('circle_dance_sefchol.mp3')">PLAY CIRCLE DANCE SEFCHOL</button>
+        <button id="Fast_and_Run_Nico_Staf" class="pausa button-1 play" style="margin-top: 300px;" onclick="setCancion('Fast_and_Run_Nico_Staf.mp3')">PLAY FAST AND RUN NICO STAF</button>
+        <button id="Switched_on_Carcassi_Brian_Bolger" class="pausa button-1 play" style="margin-top: 340px;" onclick="setCancion('Switched_on_Carcassi_Brian_Bolger.mp3')">PLAY SWITCHED ON CARCASSI BRIAN BOLGER</button>
+        <button id="Black_Mass_Brian_Bolger" class="pausa button-1 play" style="margin-top: 380px;" onclick="setCancion('Black_Mass_Brian_Bolger.mp3')">PLAY BLACK MASS BRIAN BOLGER</button>
+        <button id="Press_Fuse_French_Fuse" class="pausa button-1 play" style="margin-top: 420px;" onclick="setCancion('Press_Fuse_French_Fuse.mp3')">PLAY PRESS FUSE FRENCH FUSE</button>
+        <button class="pausa button-1 stop material-icons" style="margin-top: 460px;">STOP SONG</button>
+        <input type="range" max="1" min="0" step="0.1" class="volumen"style="margin-top: 465px; margin-left: 100px">
+        
     </p>
 
     <div class="juego" style="display: flex; height: 100px;">
         <div class="juego" style="width: 50%;" id="scene-section-1"></div>
         <div class="juego" style="flex-grow: 1;" id="scene-section-2"></div>
     </div>
+
 </body>
+<script type="text/javascript">
+    if(localStorage.getItem('language') == "esp"){
+
+        const btnResume = document.getElementById('btnResume');
+        const btnQuit = document.getElementById('btnQuit');
+        const idBody = document.getElementById('idBody');
+        
+        btnResume.setAttribute("src", "./recursos/Pausa_Resume_Button_Esp.png");
+        btnQuit.setAttribute("src", "./recursos/Pausa_Quit_Button_Esp.png");
+        idBody.setAttribute("style", "background-image: url('./recursos/Pausa_Esp.png'); margin: 0%;");
+    }  
+
+    if(localStorage.getItem('cancion') != null){
+
+        const audioR = document.getElementById('audioR');
+        audioR.innerHTML = '<source src="'+localStorage.getItem('cancion')+'" type="audio/mpeg">';
+        if(localStorage.getItem('volumen') != null){
+            audioR.volume = localStorage.getItem('volumen');
+        }
+
+    }else{
+
+        const audioR = document.getElementById('audioR');        
+        audioR.innerHTML = '<source src="OPC2 - Chasing the Dragons - Joel Cummins, Kris Myers, Andy Farag.mp3" type="audio/mpeg">';
+
+    }
+</script>
+<script src="Musica.js"></script>
+</html>

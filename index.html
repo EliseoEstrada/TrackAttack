@@ -16,17 +16,53 @@
             background-image: url('./recursos/Principal.png');
             background-repeat: no-repeat;
             background-attachment: fixed;
-            background-color: rgb(103, 250, 255);
+            background-color: rgb(103, 250, 255);     
         }
+
+        
     </style>
+
+    <audio controls autoplay loop hidden id="audioR">
+        
+    </audio>
 
 <body>
     <div class="principal-container">
-        <a class="button-1" href="Pantalla-Seleccion-Escenario.html"><img src="./recursos/Principal_Play_Button.png"></a>
-        <a class="button-2" href="Pantalla-Opciones.html"><img src="./recursos/Principal_Options_Button.png"></a>
-        <a class="button-3" href="Pantalla_Ranking.html"><img src="./recursos/Principal_Ranking_Button.png"></a>
+
+
+        <a id="linkPlay" class="button-1" href="Pantalla-Seleccion-Escenario.html"><img id="btnPlay" src="./recursos/Principal_Play_Button.png"></a>
+        <a id="linkOptions" class="button-2" href="Pantalla-Opciones.html"><img id="btnOptions" src="./recursos/Principal_Options_Button.png"></a>
+        <a id="linkRanking" class="button-3" href="Pantalla_Ranking.php"><img id="btnRanking" src="./recursos/Principal_Ranking_Button.png"></a>
+
     </div>
 
-<script src=""></script>
+<script type="text/javascript">
+    if(localStorage.getItem('language') == "esp"){
+
+        const btnPlay = document.getElementById('btnPlay');
+        const btnOptions = document.getElementById('btnOptions');
+        const btnRanking = document.getElementById('btnRanking');
+        
+        btnPlay.setAttribute("src", "./recursos/Principal_Play_Button_Esp.png");
+        btnOptions.setAttribute("src", "./recursos/Principal_Options_Button_Esp.png");
+        btnRanking.setAttribute("src", "./recursos/Principal_Ranking_Button_Esp.png");
+    } 
+
+    if(localStorage.getItem('cancion') != null){
+
+        const audioR = document.getElementById('audioR');
+        audioR.innerHTML = '<source src="'+localStorage.getItem('cancion')+'" type="audio/mpeg">';
+        if(localStorage.getItem('volumen') != null){
+            audioR.volume = localStorage.getItem('volumen');
+        }
+
+    }else{
+
+        const audioR = document.getElementById('audioR');        
+        audioR.innerHTML = '<source src="OPC2 - Chasing the Dragons - Joel Cummins, Kris Myers, Andy Farag.mp3" type="audio/mpeg">';
+
+    }
+
+</script>
 </body>
 </html>

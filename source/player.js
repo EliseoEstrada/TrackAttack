@@ -5,23 +5,31 @@ import { FBXLoader } from '../jsm/modules.js';
 export default class Player {
     constructor(noPlayer, posX, posY, posZ, render, scene, camera, DEV) {
 
+        //Numero de jugador (1,2,3,4) para definir su configuracion de teclado
         this.noPlayer = noPlayer;
+        //Crear input de jugador
         this.input = new PlayerControllerInput(this.noPlayer);
 
+        //Posciion del jugador
         this.posX = posX;
         this.posY = posY;
         this.posZ = posZ;
 
-        this.prePoxX;
+        //Pre movimiento de jugador para chechar colisiones
+        this.prePoxX;       
         this.prePoxY;
         this.prePoxZ;
 
-        this.speed = 80;
+        this.speed = 80;            //Velocidad de jugador
+        this.stunned = false;       //Jugador estuneado
+        this.stunTime = 0.0;
+        this.stunFactor = 0.01;
+        this.isCollision = false;   //Define si esta colisionando
 
 
-        this.render = render;
-        this.scene = scene
-        this.camera = camera
+        this.render = render;       //render donde se va a dibujar
+        this.scene = scene          //escena donde se va a dibujar
+        this.camera = camera        //camara donde se va a mostrar
 
 
         /* -------- */
@@ -29,17 +37,21 @@ export default class Player {
         this.pathAnimation = "../trackattack/assets/models/personaje/animaciones/";
         this.modelFile = "personaje.fbx";
 
-        this.mixer;                 //almacena keyframes
+        this.mixer;                 //Almacena keyframes
         this.modelReady = false;    //Define cuando el jugador se termina de cargar
         this.animationActions;      //Almacena animaciones
         this.activeAction;          //Accion actual
         this.lastAction;            //Ultima accion
 
-        this.action = false;
-        this.actionPressed = 0;
+        this.action = false;        //define si esta ejecutando una accion
+        this.actionPressed = 0;     //para limitar sus numeros de acciones
 
+        this.initPlayerCollition(DEV);
+        this.loadModel();
+        this.animate();
+    }
 
-
+    initPlayerCollition(DEV){
         var opacity = (DEV) ? 0.5 : 0.0 ;
         var transparentMaterial = new THREE.MeshPhongMaterial({
             color: new THREE.Color(1.0, 0.0, 0.0),
@@ -52,16 +64,6 @@ export default class Player {
         this.box.position.set(this.posX, this.posY + 15, this.posZ);
         this.boxCollition = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
         this.boxCollition.setFromObject(this.box);
-
-        this.isCollision = false;
-
-        this.init();
-    }
-
-    init(){
-
-        this.loadModel();
-        this.animate();
     }
 
 
@@ -121,16 +123,34 @@ export default class Player {
                                         //action.setLoop(THREE.LoopOnce)
                                         this.animationActions.push(action)
                                     
-                                        //personaje listo
-                                        this.modelReady = true;
-                                        //Iniciar estado
-                                        this.activeAction = this.animationActions[0];
-                                        //Agregar a la escena
-                                        this.scene.add(this.target);
-                                        //Agregar colision a la escena
-                                        this.scene.add(this.box);
-                                        //Iniciar animacion
-                                        this.animationActions[0].play();
+                                        fbxLoader.load(
+                                            'Agony.fbx',
+                                            (object) => {
+                        
+                                                const clip = object.animations[0];
+                                                const action = mixer.clipAction(clip);
+
+                                                this.animationActions.push(action)
+
+                                                                                        //personaje listo
+                                                this.modelReady = true;
+                                                //Iniciar estado
+                                                this.activeAction = this.animationActions[0];
+                                                //Agregar a la escena
+                                                this.scene.add(this.target);
+                                                //Agregar colision a la escena
+                                                this.scene.add(this.box);
+                                                //Iniciar animacion
+                                                this.animationActions[0].play();
+                                            },
+                                            (xhr) => {
+                                                //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+                                            },
+                                            (error) => {
+                                                console.log(error)
+                                            }
+                                        )
+                                        
 
                                     },
                                     (xhr) => {
@@ -223,41 +243,53 @@ export default class Player {
         if (!this.modelReady){
             return;
         }
-        
-        if(this.input.keys.forward){
 
-            this.move(1, deltaTime, collitionsModels, puzzlesCollitions );
 
-        }
-        else if(this.input.keys.backward){
+        if(!this.stunned){
+                        
+            if(this.input.keys.forward){
 
-            this.move(-1, deltaTime, collitionsModels, puzzlesCollitions );
+                this.move(1, deltaTime, collitionsModels, puzzlesCollitions );
 
-        }else if(this.input.keys.action){
-
-            this.setAction('action');
-            this.action = true;
-            if(this.actionPressed < 1){
-                this.actionPressed += 0.1;
             }
+            else if(this.input.keys.backward){
 
+                this.move(-1, deltaTime, collitionsModels, puzzlesCollitions );
+
+            }else if(this.input.keys.action){
+
+                this.setAction('action');
+                this.action = true;
+                if(this.actionPressed < 1){
+                    this.actionPressed += 0.1;
+                }
+
+            }else{
+
+                this.action = false;
+                this.actionPressed = 0;
+                this.setAction('idle');
+                this.box.position.set(this.target.position.x,this.target.position.y + 15, this.target.position.z);
+            }
+            
+            if(this.input.keys.left){
+
+                this.rotate(1, deltaTime)
+
+            }
+            else if(this.input.keys.right){
+
+                this.rotate(-1, deltaTime)
+
+            }
         }else{
-
             this.action = false;
-            this.actionPressed = 0;
-            this.setAction('idle');
-            this.box.position.set(this.target.position.x,this.target.position.y + 15, this.target.position.z);
-        }
-        
-        if(this.input.keys.left){
-
-            this.rotate(1, deltaTime)
-
-        }
-        else if(this.input.keys.right){
-
-            this.rotate(-1, deltaTime)
-
+            this.setAction('stun');
+            this.stunTime += this.stunFactor;
+            if(this.stunTime > 1.0){
+                this.stunned = false;
+                this.stunTime = 0.0;
+            }
         }
         
 
@@ -278,7 +310,8 @@ export default class Player {
             case 'action':
                 toAction = 2;
                 break;
-            case 'dance':
+
+            case 'stun':
                 toAction = 3;
                 break;
         }

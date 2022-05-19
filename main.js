@@ -9,6 +9,7 @@ import Model from './source/model.js';
 
 import Puzzle01 from './source/puzzles/puzzle01.js';
 import Puzzle02 from './source/puzzles/puzzle02.js';
+import Puzzle03 from './source/puzzles/puzzle03.js';
 
 //Obtener nivel y cantidad de jugadores
 const queryString = window.location.search;
@@ -20,9 +21,9 @@ let COOP = false;
 if (game_mode == "coop") {
     COOP = true;
 }
-let DIFFICULTY;
+let DIFFICULTY = 2;
 let PAUSE = false;
-let DEV = true;
+let DEV = false;
 
 
 var visibleSize;
@@ -45,11 +46,12 @@ var player1, player2, player3, player4;
 var puzzle1_1_s1, puzzle1_2_s1, puzzle1_3_s1;
 var puzzle1_1_s2, puzzle1_2_s2, puzzle1_3_s2;
 var puzzle2_s1, puzzle2_s2;
+var puzzle3_s1, puzzle3_s2;
 
 
 //Objs de modelos
 var objModels = [];
-var pared_obj, cerca_obj, palanca_obj, puente_obj;
+var pared_obj, cerca_obj, palanca_obj, puente_obj, caja_obj, tapa_obj, llave_obj, bomba_obj;
 
 //Arreglo de colisiones de objs
 var modelsCollitions = []
@@ -233,14 +235,50 @@ function render() {
         //--------------------------------Scena 1--------------------------------
         if (!puzzle2_s1.complete) {
             puzzle2_s1.update(player1.boxCollition, player1.action, player3.boxCollition, player3.action);
+            if(puzzle2_s1.complete){
+                puzzle2_s1.finishPuzzle(scenes[0], puzzlesCollitions_s1)
+            }
         }
         //--------------------------------Scena 2--------------------------------
         if (!puzzle2_s2.complete) {
             puzzle2_s2.update(player2.boxCollition, player2.action, player4.boxCollition, player4.action);
+            if(puzzle2_s2.complete){
+                puzzle2_s2.finishPuzzle(scenes[1], puzzlesCollitions_s2)
+            }
         }
 
+        ////////////////////////////////TERCER MINIJUEGO////////////////////////////////
+        //--------------------------------Scena 1--------------------------------
+        if (!puzzle3_s1.complete){      
+            if(COOP){
+                
+                puzzle3_s1.update(player1.boxCollition, player1.action, player1, player3.boxCollition, player3.action, player3);
 
+            }else{
+                
+                puzzle3_s1.update(player1.boxCollition, player1.action, player1);
+            }
+            
+            if(puzzle3_s1.complete){
+                puzzle3_s1.finishPuzzle(scenes[0], puzzlesCollitions_s1);
+            }
+        }
 
+        //--------------------------------Scena 2--------------------------------
+        if (!puzzle3_s2.complete){      
+            if(COOP){
+
+                puzzle3_s2.update(player2.boxCollition, player2.action, player2, player4.boxCollition, player4.action, player4);
+            
+            }else{
+
+                puzzle3_s2.update(player2.boxCollition, player2.action, player2);
+            }
+
+            if(puzzle3_s2.complete){
+                puzzle3_s2.finishPuzzle(scenes[1], puzzlesCollitions_s2);
+            }
+        }
 
         //Actualizar camaras
         if (COOP) {
@@ -291,6 +329,15 @@ function loadModels() {
     objModels.push(palanca_obj);
     puente_obj = new LoadOBJ("assets/models/origen2/", "puente.obj", "material_global.mtl", finishLoad);
     objModels.push(puente_obj);
+
+    caja_obj = new LoadOBJ("assets/models/origen2/", "caja_base.obj", "material_global.mtl", finishLoad);
+    objModels.push(caja_obj);
+    tapa_obj = new LoadOBJ("assets/models/origen2/", "caja_tapa.obj", "material_global.mtl", finishLoad);
+    objModels.push(tapa_obj);
+    llave_obj = new LoadOBJ("assets/models/origen2/", "llave.obj", "material_global.mtl", finishLoad);
+    objModels.push(llave_obj);
+    bomba_obj = new LoadOBJ("assets/models/origen2/", "bomba.obj", "material_global.mtl", finishLoad);
+    objModels.push(bomba_obj);
 }
 
 //Comprobar si ya se cargaron todos los objs
@@ -320,10 +367,11 @@ function initObjects() {
 
 
     //var cercaClone = cerca_obj.obj.clone();
-    var fence01 = new Model(0, -17.867, 360, 90, 1.15, cerca_obj.obj.clone(), 380, 50, 20, DEV);
-    fence01.activeCollition(modelsCollitions)
-    fence01.renderer(scenes);
-
+    if(COOP){
+        var fence01 = new Model(0, -17.867, 360, 90, 1.15, cerca_obj.obj.clone(), 380, 50, 20, DEV);
+        fence01.activeCollition(modelsCollitions)
+        fence01.renderer(scenes);
+    }
     var fence02 = new Model(-200, -17.867, 160, 90, 1, cerca_obj.obj.clone(), 380, 50, 20, DEV);
     fence02.activeCollition(modelsCollitions)
     fence02.renderer(scenes);
@@ -356,6 +404,26 @@ function initObjects() {
     fence09.activeCollition(modelsCollitions)
     fence09.renderer(scenes);
 
+    var fence10 = new Model(0, -17.867, 555, 0, 1, cerca_obj.obj.clone(), 380, 50, 20, DEV);
+    fence10.activeCollition(modelsCollitions)
+    fence10.renderer(scenes);
+
+    var fence11 = new Model(200, -17.867, -400, 90, 1, cerca_obj.obj.clone(), 380, 50, 20, DEV);
+    fence11.activeCollition(modelsCollitions)
+    fence11.renderer(scenes);
+
+    var fence12 = new Model(-200, -17.867, -400, 90, 1, cerca_obj.obj.clone(), 380, 50, 20, DEV);
+    fence12.activeCollition(modelsCollitions)
+    fence12.renderer(scenes);
+
+    var fence13 = new Model(200, -17.867, -780, 90, 1, cerca_obj.obj.clone(), 380, 50, 20, DEV);
+    fence13.activeCollition(modelsCollitions)
+    fence13.renderer(scenes);
+
+    var fence14 = new Model(-200, -17.867, -780, 90, 1, cerca_obj.obj.clone(), 380, 50, 20, DEV);
+    fence14.activeCollition(modelsCollitions)
+    fence14.renderer(scenes);
+
 
     //PUZZLE 1 MUROS
     puzzle1_1_s1 = new Puzzle01(-180, -18, 400, 0, 100, -18, 400, palanca_obj.obj.clone(), pared_obj.obj.clone(), puzzlesCollitions_s1, DEV)
@@ -377,11 +445,67 @@ function initObjects() {
     puzzle1_3_s2.renderer(scenes[1]);
 
     //PUZZLE 2 PUENTE
-    puzzle2_s1 = new Puzzle02(0, 0, -110, 90, 0, 0, -110, puente_obj.obj.clone(), palanca_obj.obj.clone(), puzzlesCollitions_s1, DEV)
+    puzzle2_s1 = new Puzzle02(
+        0, 
+        0, 
+        -110, 
+        0, 
+        puente_obj.obj.clone(), 
+        palanca_obj.obj.clone(), 
+        puzzlesCollitions_s1, 
+        COOP,
+        DIFFICULTY,
+        DEV
+    )
     puzzle2_s1.renderer(scenes[0]);
 
-    puzzle2_s2 = new Puzzle02(0, 0, -110, 90, 0, 0, -110, puente_obj.obj.clone(), palanca_obj.obj.clone(), puzzlesCollitions_s2, DEV)
+    puzzle2_s2 = new Puzzle02(
+        0, 
+        0, 
+        -110, 
+        0, 
+        puente_obj.obj.clone(), 
+        palanca_obj.obj.clone(), 
+        puzzlesCollitions_s2, 
+        COOP,
+        DIFFICULTY,
+        DEV
+    )
     puzzle2_s2.renderer(scenes[1]);
+
+
+    puzzle3_s1 = new Puzzle03(
+        0,
+        0, 
+        -450,
+        caja_obj.obj.clone(), 
+        tapa_obj.obj.clone(), 
+        llave_obj.obj.clone(), 
+        bomba_obj.obj.clone(), 
+        pared_obj.obj.clone(),
+        puzzlesCollitions_s1,
+        COOP,
+        DIFFICULTY,
+        DEV
+    );
+
+    puzzle3_s2 = new Puzzle03(
+        0,
+        0, 
+        -450,
+        caja_obj.obj.clone(), 
+        tapa_obj.obj.clone(), 
+        llave_obj.obj.clone(), 
+        bomba_obj.obj.clone(), 
+        pared_obj.obj.clone(),
+        puzzlesCollitions_s2,
+        COOP,
+        DIFFICULTY,
+        DEV
+    );
+
+    puzzle3_s1.renderer(scenes[0]);
+    puzzle3_s2.renderer(scenes[1]);
 
     //Iniciar juego cuando todo este listo
     startGame();
