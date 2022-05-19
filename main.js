@@ -23,7 +23,7 @@ if (game_mode == "coop") {
 }
 let DIFFICULTY = 2;
 let PAUSE = false;
-let DEV = false;
+let DEV = true;
 
 
 var visibleSize;
@@ -234,14 +234,24 @@ function render() {
         ////////////////////////////////SEGUNDO MINIJUEGO////////////////////////////////
         //--------------------------------Scena 1--------------------------------
         if (!puzzle2_s1.complete) {
-            puzzle2_s1.update(player1.boxCollition, player1.action, player3.boxCollition, player3.action);
+            if(COOP){
+                puzzle2_s1.update(player1.boxCollition, player1.action, player3.boxCollition, player3.action);
+            }else{
+                puzzle2_s1.update(player1.boxCollition, player1.action);
+            }
+            
             if(puzzle2_s1.complete){
                 puzzle2_s1.finishPuzzle(scenes[0], puzzlesCollitions_s1)
             }
         }
         //--------------------------------Scena 2--------------------------------
         if (!puzzle2_s2.complete) {
-            puzzle2_s2.update(player2.boxCollition, player2.action, player4.boxCollition, player4.action);
+            if(COOP){
+                puzzle2_s2.update(player2.boxCollition, player2.action, player4.boxCollition, player4.action);
+            }else{
+                puzzle2_s2.update(player2.boxCollition, player2.action);
+            }
+            
             if(puzzle2_s2.complete){
                 puzzle2_s2.finishPuzzle(scenes[1], puzzlesCollitions_s2)
             }
